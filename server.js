@@ -41,12 +41,6 @@ app.get('/alumni/:criteria', (req, res) => {
 app.post('/alumni', (req, res) => {
     let { nama, tahunlulus, jurusan, status  } = req.body
 
-    // let sql = `insert into test value (${req.body.age}, "${req.body.name}")`
-    // con.query(sql, (err, result) => {
-    //     if (err) throw err;
-    //     res.send('record inserted')
-    // })
-
     let sql = `insert into alumni(nama, tahunLulus, jurusan, status) value ("${req.body.nama}", ${req.body.tahunlulus}, ${req.body.jurusan}, "${req.body.status}")`
     con.query(sql, (err, result) => {
         if(err) throw err
