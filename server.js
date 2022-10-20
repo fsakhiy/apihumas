@@ -13,13 +13,23 @@ let con  = mysql.createConnection({
 
 con.connect((err) => {
     if(err) throw err
-    console.log("Connected!s")
+    console.log("Connected!")
 })
 
 app.use(express.json())
 
 app.get('/', (req, res) => {
     res.send('<h1>Welcome to the smk8 api</h1>')
+})
+
+app.get('/alumni/:criteria', (req, res) => {
+    let criteria = req.params.criteria
+    if(criteria == "all") {
+        con.query("select * from alumni", (err, result, fields) => {
+            if(err) throw err
+            console.log(result)
+        })
+    }
 })
 
 app.listen(port, () => {console.log(`server is running on port ${port}`)})
