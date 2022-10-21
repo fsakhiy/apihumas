@@ -18,36 +18,12 @@ con.connect((err) => {
 
 app.use(express.json())
 
+//-------------------- GET ------------------
+
 app.get('/', (req, res) => {
     res.send('<h1>Welcome to the smk8 api</h1>')
 })
 
-// app.get('/:data/:criteria', (req, res) => {
-//     let criteria = req.params.criteria
-//     let data = req.params.data
-//     let sql
-
-//     if(data === "alumni") {    
-//         if(criteria === "all") {
-//             sql = "select * from alumni"
-//         } else {
-//             criteria = parseInt(criteria)
-//             sql = `select * from alumni where id=${criteria}`
-//         }
-//     } else if (criteria === "lowongan") {
-//         if(criteria === "all") {
-//             sql = "select * from lowongan"
-//         } else {
-//             criteria = parseInt(criteria)
-//             sql = `select * from alumni where id=${criteria}`
-//         }
-//     }
-    
-//     con.query(sql, (err, result, fields) => {
-//         if (err) throw err
-//         res.send(result)
-//     })
-// })
 
 app.get('/alumni/:criteria', (req, res) => {
     let criteria = req.params.criteria
@@ -83,6 +59,8 @@ app.get('/lowongan/:criteria', (req, res) => {
     })
 })
 
+//--------------------- POST -----------------
+
 app.post('/alumni', (req, res) => {
     let { nama, tahunlulus, jurusan, status  } = req.body
 
@@ -103,13 +81,15 @@ app.post('/lowongan', (req, res) => {
     })
 })
 
-app.delete('/:data/:id', (req, res) => {
-    let sql
+//--------------------- DELETE -------------------
+
+app.delete('/alumni/:id', (req, res) => {
     let id = req.params.id
-    let data = req.params.data
-    if(data === "alumni") {
-        sql = `delete from alumni where id=${id}}`
-    }
+    let sql = `delete from alumni where id=${id}`
+    con.query(sql, (err, result) => {
+        if (err) throw err
+        res.send('data destroyed')
+    })
 })
 
 app.listen(port, () => {console.log(`server is running on port ${port}`)})
