@@ -5,9 +5,9 @@ const mysql = require('mysql')
 
 let con  = mysql.createConnection({
     host: "localhost",
-    user: "root",
-    password: "12345678",
-    database: 'test',
+    user: "loc",
+    password: "Loc#4096",
+    database: 'api',
     port: 3306
 })
 
