@@ -21,18 +21,18 @@ app.use(express.json())
 //-------------------- GET ------------------
 
 app.get('/', (req, res) => {
-    res.send(`<h1>Welcome to the smk 8 humas api
-    <br><p>method:
-    get :   /alumni/:criteria           
-            /lowongan/:criteria
-            -> criteria = id or all(to display all of the data)
+    res.send(`<h1>Welcome to the smk 8 humas api<h1>
+    <br><p>method:<br>
+    get :   /alumni/:criteria<br>           
+            /lowongan/:criteria<br>
+            -> criteria = id or all(to display all of the data)<br>
 
 
-    post:   /alumni         -> json body nama, tahunlulus, jurusan, status
-            /lowongan       -> json body judul, deskripsi, kemampuan, jenis
+    post:   /alumni         -> json body nama, tahunlulus, jurusan, status<br>
+            /lowongan       -> json body judul, deskripsi, kemampuan, jenis<br>
 
-    delete: /alumni/:id
-            /lowongan/:id
+    delete: /alumni/:id<br>
+            /lowongan/:id<br>
     </p>`)
 })
 
