@@ -21,7 +21,19 @@ app.use(express.json())
 //-------------------- GET ------------------
 
 app.get('/', (req, res) => {
-    res.send('<h1>Welcome to the smk8 api</h1>')
+    res.send(`<h1>Welcome to the smk 8 humas api
+    <br><p>method:
+    get :   /alumni/:criteria           
+            /lowongan/:criteria
+            -> criteria = id or all(to display all of the data)
+
+
+    post:   /alumni         -> json body nama, tahunlulus, jurusan, status
+            /lowongan       -> json body judul, deskripsi, kemampuan, jenis
+
+    delete: /alumni/:id
+            /lowongan/:id
+    </p>`)
 })
 
 
