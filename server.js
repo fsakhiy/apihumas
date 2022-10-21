@@ -21,7 +21,7 @@ app.use(express.json())
 //-------------------- GET ------------------
 
 app.get('/', (req, res) => {
-    res.send(`<h1>Welcome to the smk 8 humas api<h1>
+    res.send(`<h1>Welcome to the smk 8 humas api</h1>
     <br><p>method:<br>
     get :   /alumni/:criteria<br>           
             /lowongan/:criteria<br>
