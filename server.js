@@ -23,16 +23,20 @@ app.use(express.json())
 app.get('/', (req, res) => {
     res.send(`<h1>Welcome to the smk 8 humas api</h1>
     <br><p>method:<br>
-    get :   /alumni/:criteria<br>           
+    <b>get :</b>   /alumni/:criteria<br>           
             /lowongan/:criteria<br>
             -> criteria = id or all(to display all of the data)<br>
 
     <br>
-    post:   /alumni         -> json body nama, tahunlulus, jurusan, status<br>
+    <b>post:</b>   /alumni         -> json body nama, tahunlulus, jurusan, status<br>
             /lowongan       -> json body judul, deskripsi, kemampuan, jenis<br>
     <br>
-    delete: /alumni/:id<br>
+    <b>delete:</b> /alumni/:id<br>
             /lowongan/:id<br>
+    <b>patch:</b> /alumni & /lowongan -> json body id, where, fix<br>
+    id=id of the row you wanna change<br>
+    where= what you want to change<br>
+    fix= your change
     </p>`)
 })
 
