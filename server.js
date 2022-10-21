@@ -76,6 +76,11 @@ app.get('/lowongan/:criteria', (req, res) => {
         criteria = parseInt(criteria)
         sql = `select * from lowongan where id=${criteria}`
     }
+
+    con.query(sql, (err, result, fields) => {
+        if (err) throw err
+        res.send(result)
+    })
 })
 
 app.post('/alumni', (req, res) => {
