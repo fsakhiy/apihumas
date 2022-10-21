@@ -53,7 +53,7 @@ app.get('/alumni/:criteria', (req, res) => {
     let criteria = req.params.criteria
     let sql 
 
-    if(criteria === "all") {
+    if(criteria === "all" || criteria === "") {
         sql = "select * from alumni"
     } else {
         criteria = parseInt(criteria)
@@ -64,6 +64,18 @@ app.get('/alumni/:criteria', (req, res) => {
         if (err) throw err
         res.send(result)
     })
+})
+
+app.get('/lowongan/:criteria', (req, res) => {
+    let criteria = req.params.criteria
+    let sql
+    
+    if(criteria === "all" || criteria === "") {
+        sql = "select * from lowongan"
+    } else {
+        criteria = parseInt(criteria)
+        sql = `select * from lowongan where id=${criteria}`
+    }
 })
 
 app.post('/alumni', (req, res) => {
