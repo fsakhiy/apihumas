@@ -69,4 +69,13 @@ app.post('/lowongan', (req, res) => {
     })
 })
 
+app.delete('/:data/:id', (req, res) => {
+    let sql
+    let id = req.params.id
+    let data = req.params.data
+    if(data === "alumni") {
+        sql = `delete from alumni where id=${id}}`
+    }
+})
+
 app.listen(port, () => {console.log(`server is running on port ${port}`)})
