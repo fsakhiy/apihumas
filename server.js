@@ -95,15 +95,27 @@ app.post('/lowongan', (req, res) => {
 
 //--------------------- PATCH -------------------
 
-app.patch("/alumni/:id/:where", (req, res) => {
-    let id = req.params.id
-    let where = req.params.where
-    let { fix } = req.body
-    let sql = `update alumni set ${where}="${fix}" where id=${id}`
+// app.patch("/alumni/:id/:where", (req, res) => {
+//     let id = req.params.id
+//     let where = req.params.where
+//     let { fix } = req.body
+//     let sql = `update alumni set ${where}="${fix}" where id=${id}`
 
+//     con.query(sql, (err, result) => {
+//         if (err) throw err
+//         res.send(`${where} = ${fix} @ ${id}`)
+//     })
+// })
+
+app.patch("/alumni", (req, res) => {
+    let { id, where, fix } = req.body
+    let sql
+    if(typeof fix == String) {
+        sql = `update alumni set ${where}="${fix}" where id=${id}`
+    }
     con.query(sql, (err, result) => {
         if (err) throw err
-        res.send(`${where} = ${fix} @ ${id}`)
+        res.send('data updated')
     })
 })
 
