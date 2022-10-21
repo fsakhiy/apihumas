@@ -92,4 +92,13 @@ app.delete('/alumni/:id', (req, res) => {
     })
 })
 
+app.delete('/lowongan/:id', (req, res) => {
+    let id = req.params.id
+    let sql = `delete from lowongan where id=${id}`
+    con.query(sql, (err, result) => {
+        if (err) throw err
+        res.send('data destroyed')
+    })
+})
+
 app.listen(port, () => {console.log(`server is running on port ${port}`)})
