@@ -109,14 +109,15 @@ app.post('/lowongan', (req, res) => {
 
 app.patch("/alumni", (req, res) => {
     let { id, where, fix } = req.body
-    let sql
-    //if(typeof fix == String) {
-        sql = `update alumni set ${where}="${fix}" where id=${id}`
-    //}
-    con.query(sql, (err, result) => {
-        if (err) throw err
-        res.send('data updated')
-    })
+    let sql        
+    sql = `update alumni set ${where}="${fix}" where id=${id}`
+    
+    // con.query(sql, (err, result) => {
+    //     if (err) throw err
+    //     res.send('data updated ' + typeof fix)
+    // })
+
+    res.send(typeof fix)
 })
 
 
