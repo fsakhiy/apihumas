@@ -27,10 +27,10 @@ app.get('/', (req, res) => {
             /lowongan/:criteria<br>
             -> criteria = id or all(to display all of the data)<br>
 
-
+    <br>
     post:   /alumni         -> json body nama, tahunlulus, jurusan, status<br>
             /lowongan       -> json body judul, deskripsi, kemampuan, jenis<br>
-
+    <br>
     delete: /alumni/:id<br>
             /lowongan/:id<br>
     </p>`)
