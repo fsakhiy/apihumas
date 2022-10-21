@@ -109,6 +109,19 @@ app.patch('/alumni', (req, res) => {
     })
 })
 
+app.patch('/lowongan', (req, res) => {
+    let { id, where, fix } = req.body
+    let sql
+    if(typeof fix == "number") {
+        sql = `update alumni set ${where}=${fix} where id=${id}`
+    } else if (typeof fix == "string") {
+        sql = `update alumni set ${where}="${fix}" where id=${id}`
+    }
+    con.query(sql, (err, result) => {
+        if (err) throw err
+        res.send(`${where} is set to ${fix} at ${id}`)
+    })
+})
 
 //--------------------- DELETE -------------------
 
