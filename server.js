@@ -22,14 +22,25 @@ app.get('/', (req, res) => {
     res.send('<h1>Welcome to the smk8 api</h1>')
 })
 
-app.get('/alumni/:criteria', (req, res) => {
+app.get('/:data/:criteria', (req, res) => {
     let criteria = req.params.criteria
+    let data = req.params.data
     let sql
-    if(criteria === "all") {
-        sql = "select * from alumni"
-    } else {
-        criteria = parseInt(criteria)
-        sql = `select * from alumni where id=${criteria}`
+
+    if(data === "alumni") {    
+        if(criteria === "all") {
+            sql = "select * from alumni"
+        } else {
+            criteria = parseInt(criteria)
+            sql = `select * from alumni where id=${criteria}`
+        }
+    } else if (criteria === "lowongan") {
+        if(criteria === "all") {
+            sql = "select * from lowongan"
+        } else {
+            criteria = parseInt(criteria)
+            sql = `select * from alumni where id=${criteria}`
+        }
     }
     
     con.query(sql, (err, result, fields) => {
@@ -41,9 +52,19 @@ app.get('/alumni/:criteria', (req, res) => {
 app.post('/alumni', (req, res) => {
     let { nama, tahunlulus, jurusan, status  } = req.body
 
-    let sql = `insert into alumni(nama, tahunLulus, jurusan, status) value ("${req.body.nama}", ${req.body.tahunlulus}, ${req.body.jurusan}, "${req.body.status}")`
+    let sql = `insert into alumni(nama, tahunLulus, jurusan, status) value ("${nama}", ${tahunlulus}, ${jurusan}, "${status}")`
     con.query(sql, (err, result) => {
         if(err) throw err
+        res.send('record inserted')
+    })
+})
+
+app.post('/lowongan', (req, res) => {
+    let { judul, deskripsi, kemampuan, jenis} = req.body
+
+    let sql = `insert into lowongan(judul, deskripsi, kemampuanDibutuhkan, jenisPekerjaan) value ("${judul}", "${deskripsi}", "${kemampuan}", "${jenis}")`
+    con.query(sql, (err, result) => {
+        if (err) throw err
         res.send('record inserted')
     })
 })
