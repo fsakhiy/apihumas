@@ -99,7 +99,11 @@ app.post('/lowongan', (req, res) => {
 
 app.use('/login', (req, res) => {
     let { username, password, token } = req.body
-    let sql
+    let sql = `select password from alumni where username='${username}'`
+    con.query(sql, (err, result) => {
+        if(err) throw err
+        res.send(result)
+    })
 })
 
 //--------------------- PATCH -------------------
@@ -122,9 +126,9 @@ app.patch('/lowongan', (req, res) => {
     let { id, where, fix } = req.body
     let sql
     if(typeof fix == "number") {
-        sql = `update alumni set ${where}=${fix} where id=${id}`
+        sql = `update lowongan set ${where}=${fix} where id=${id}`
     } else if (typeof fix == "string") {
-        sql = `update alumni set ${where}="${fix}" where id=${id}`
+        sql = `update lowongan set ${where}="${fix}" where id=${id}`
     }
     con.query(sql, (err, result) => {
         if (err) throw err
