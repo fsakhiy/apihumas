@@ -99,7 +99,7 @@ app.post('/lowongan', (req, res) => {
 
 app.use('/login', (req, res) => {
     let { username, password, token } = req.body
-    let sql = `select password from alumni where username='${username}'`
+    let sql = `select password from user where username='${username}'`
     con.query(sql, (err, result) => {
         if(err) throw err
         res.send(result)
