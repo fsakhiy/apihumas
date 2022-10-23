@@ -20,26 +20,30 @@ app.use(express.json())
 
 //-------------------- GET ------------------
 
+// app.get('/', (req, res) => {
+//     res.send(`<h1>Welcome to the smk 8 humas api</h1>
+//     <br><p>method:<br>
+//     <b>get :</b>   /alumni/:criteria<br>           
+//             /lowongan/:criteria<br>
+//             -> criteria = id or all(to display all of the data)<br>
+
+//     <br>
+//     <b>post:</b>   /alumni         -> json body nama, tahunlulus, jurusan, status<br>
+//             /lowongan       -> json body judul, deskripsi, kemampuan, jenis<br>
+//     <br>
+//     <b>delete:</b> /alumni/:id<br>
+//             /lowongan/:id<br>
+//     <b>patch:</b> /alumni & /lowongan -> json body id, where, fix<br>
+//     id=id of the row you wanna change<br>
+//     where= what you want to change<br>
+//     fix= your change
+//     </p>`)
+// })
+
+
 app.get('/', (req, res) => {
-    res.send(`<h1>Welcome to the smk 8 humas api</h1>
-    <br><p>method:<br>
-    <b>get :</b>   /alumni/:criteria<br>           
-            /lowongan/:criteria<br>
-            -> criteria = id or all(to display all of the data)<br>
-
-    <br>
-    <b>post:</b>   /alumni         -> json body nama, tahunlulus, jurusan, status<br>
-            /lowongan       -> json body judul, deskripsi, kemampuan, jenis<br>
-    <br>
-    <b>delete:</b> /alumni/:id<br>
-            /lowongan/:id<br>
-    <b>patch:</b> /alumni & /lowongan -> json body id, where, fix<br>
-    id=id of the row you wanna change<br>
-    where= what you want to change<br>
-    fix= your change
-    </p>`)
+    res.sendFile(__dirname + '/static/index.html')
 })
-
 
 app.get('/alumni/:criteria', (req, res) => {
     let criteria = req.params.criteria
@@ -75,6 +79,23 @@ app.get('/lowongan/:criteria', (req, res) => {
     })
 })
 
+app.get('/jurusan/:id', (req, res) => {
+    let id = req.params.id
+    let sql
+
+    if(id === "all" || id === ""){
+        sql = `select * from jurusan`
+    } else if(typeof id == "number") {
+        id = parseInt(id)
+        sql = `select * from jurusan where id=${id}`
+    }
+
+    con.query(sql, (err, result, fields) => {
+        if(err) throw err
+        res.send(result)
+    })
+})
+
 //--------------------- POST -----------------
 
 app.post('/alumni', (req, res) => {
@@ -95,6 +116,11 @@ app.post('/lowongan', (req, res) => {
         if (err) throw err
         res.send('record inserted')
     })
+})
+
+app.use('/login', (req, res) => {
+    let { username, password, token } = req.body
+    let sql
 })
 
 //--------------------- PATCH -------------------
