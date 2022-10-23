@@ -8,5 +8,34 @@
 </head>
 <body>
     <h1>Docs</h1>
+    <p>
+        this is the api documentation to help you get started with using it
+        <br>
+        GET method:
+        this is used for retreiving info from the api
+        /alumni/:criteria
+        /lowongan/:criteria
+        /jurusan/:criteria
+        <br>
+        :criteria = search criteria ('all' if you want to list everything or you can <strong>put the id to search for specific id</strong>)
+        <br><br>
+        POST method:
+        this method is used for adding data to the api
+        /alumni
+        -> json body -> nama, tahunlulus, jurusan, status
+        /lowongan
+        -> json body -> judul, deskripsi, kemampuan, jenis
+        <br><br>
+        PATCH method
+        this method is used for updating data in the api
+        /alumni
+        /lowongan
+        -> json body -> where, fix, id -> where (what you want to change i.e nama tahunlulus status), fix (what do you want to change it to), id (the id of the data you want to change)
+        <br><br>
+        DELETE method
+        /alumni/:id
+        /lowongan/:id
+        -> id -> specify which one you want to change
+    </p>
 </body>
 </html>

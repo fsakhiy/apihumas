@@ -79,8 +79,8 @@ app.get('/lowongan/:criteria', (req, res) => {
     })
 })
 
-app.get('/jurusan/:id', (req, res) => {
-    let id = req.params.id
+app.get('/jurusan/:criteria', (req, res) => {
+    let id = req.params.criteria
     let sql
 
     if(id === "all" || id === ""){
