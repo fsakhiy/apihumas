@@ -85,7 +85,7 @@ app.get('/jurusan/:criteria', (req, res) => {
 
     if(id === "all" || id === ""){
         sql = `select * from jurusan`
-    } else if(typeof id == "number") {
+    } else {
         id = parseInt(id)
         sql = `select * from jurusan where id=${id}`
     }
