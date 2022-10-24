@@ -11,6 +11,13 @@ let con  = mysql.createConnection({
     port: 3306
 })
 
+app.get('*', (req, res, next) => {
+    if(req.headers.host == 'apihumas.localhost'){
+        req.url = '/'
+    } 
+    next();
+})
+
 con.connect((err) => {
     if(err) throw err
     console.log("Connected!")
