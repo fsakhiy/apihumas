@@ -11,13 +11,6 @@ let con  = mysql.createConnection({
     port: 3306
 })
 
-app.get('*', (req, res, next) => {
-    if(req.headers.host == 'apihumas.localhost'){
-        req.url = '/'
-    } 
-    next();
-})
-
 con.connect((err) => {
     if(err) throw err
     console.log("Connected!")
@@ -104,7 +97,16 @@ app.post('/lowongan', (req, res) => {
     })
 })
 
-app.use('/login', (req, res) => {
+app.post('/user', (req, res) => {
+    const { idalumni, username, password } = req.body
+    let sql = `insert into user(username, password, idAlumni) value ('${username}', '${password}', ${idalumni})`
+    con.query(sql, (err,result) => {
+        if(err) throw err
+        res.send('record inserted')
+    })
+})
+
+app.post('/login', (req, res) => {
     let { username, password, token } = req.body
     let sql = `select password from user where username='${username}'`
     con.query(sql, (err, result) => {
@@ -144,6 +146,10 @@ app.patch('/lowongan', (req, res) => {
         if (err) throw err
         res.send(`${where} is set to ${fix} at ${id}`)
     })
+})
+
+app.patch('/user/resetpassword', (req, res) => {
+    
 })
 
 //--------------------- DELETE -------------------
