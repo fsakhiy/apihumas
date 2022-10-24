@@ -75,18 +75,27 @@ app.get('/', (req, res) => {
 //     })
 // })
 
+function checkcriteria(data, criteria) {
+    let sql
+    if(criteria === "all") {
+        sql = `select * from ${data}`
+    } else if(typeof criteria == "number"){
+        criteria = parseInt(criteria)
+        sql = `select * from ${data} where id=${criteria}`
+    } else {
+        throw ReferenceError("data not found")
+    }
+    con.query(sql, (err, result) => {
+        if (err) throw err
+        return result
+    })
+}
+
 app.get('/:data/:criteria', (req, res) => {
     const data = req.params.data
     const criteria = req.params.criteria
     let sql
-    if(data === "alumni") {
-        if(criteria === "all"){
-            sql = `select * from alumni`
-        } else {
-            criteria = parseInt(criteria)
-            sql  = `select * from alumni where id=${criteria}`
-        }
-    }
+    res.send(checkcriteria(data, criteria))
 })
 
 //--------------------- POST -----------------
