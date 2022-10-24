@@ -30,14 +30,17 @@ app.get('/:data/:criteria', (req, res) => {
     let criteria = req.params.criteria
     let sql = `select * from ${data}`
 
-    if(criteria != "all") {
-        criteria = parseInt(criteria)
-        sql = `select * from ${data} where id=${criteria}`
-    }
-
-    if(data != "lowongan" || data != "alumni" || data != "jurusan") {
-        res.status(401)
-        res.render("Unauthorized")
+    if(data == "lowongan" || data == "alumni") {
+        
+        if(criteria != "all") {
+            criteria = parseInt(criteria)
+            sql = `select * from ${data} where id=${criteria}`
+        } else {
+            sql = `select * from ${data}`
+        }
+    } else {
+        res.send('not authorized')
+        return
     }
 
     con.query(sql, (err, result) => {
