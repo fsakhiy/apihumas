@@ -102,8 +102,11 @@ app.use('/login', (req, res) => {
     let sql = `select password from user where username='${username}'`
     con.query(sql, (err, result) => {
         if(err) throw err
-        res.send(result)
+        //res.send(result)
+        const pass = JSON.parse(result)
+        res.send(pass)
     })
+    
 })
 
 //--------------------- PATCH -------------------
