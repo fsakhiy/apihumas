@@ -101,6 +101,11 @@ app.get('/:data/:criteria', (req, res) => {
         sql = `select * from ${data} where id=${criteria}`
     }
 
+    if(data != "lowongan", "alumni", "jurusan") {
+        res.status(401)
+        res.render("Unauthorized")
+    }
+
     con.query(sql, (err, result) => {
         if (err) throw err
         res.send(result)
