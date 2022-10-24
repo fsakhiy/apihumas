@@ -24,55 +24,69 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/static/index.html')
 })
 
-app.get('/alumni/:criteria', (req, res) => {
-    let criteria = req.params.criteria
-    let sql 
+// app.get('/alumni/:criteria', (req, res) => {
+//     let criteria = req.params.criteria
+//     let sql 
 
-    if(criteria === "all" || criteria === "") {
-        sql = "select * from alumni"
-    } else {
-        criteria = parseInt(criteria)
-        sql = `select * from alumni where id=${criteria}`
-    }
+//     if(criteria === "all" || criteria === "") {
+//         sql = "select * from alumni"
+//     } else {
+//         criteria = parseInt(criteria)
+//         sql = `select * from alumni where id=${criteria}`
+//     }
 
-    con.query(sql, (err, result, fields) => {
-        if (err) throw err
-        res.send(result)
-    })
-})
+//     con.query(sql, (err, result, fields) => {
+//         if (err) throw err
+//         res.send(result)
+//     })
+// })
 
-app.get('/lowongan/:criteria', (req, res) => {
-    let criteria = req.params.criteria
-    let sql
+// app.get('/lowongan/:criteria', (req, res) => {
+//     let criteria = req.params.criteria
+//     let sql
     
-    if(criteria === "all" || criteria === "") {
-        sql = "select * from lowongan"
-    } else {
-        criteria = parseInt(criteria)
-        sql = `select * from lowongan where id=${criteria}`
-    }
+//     if(criteria === "all" || criteria === "") {
+//         sql = "select * from lowongan"
+//     } else {
+//         criteria = parseInt(criteria)
+//         sql = `select * from lowongan where id=${criteria}`
+//     }
 
-    con.query(sql, (err, result, fields) => {
-        if (err) throw err
-        res.send(result)
-    })
-})
+//     con.query(sql, (err, result, fields) => {
+//         if (err) throw err
+//         res.send(result)
+//     })
+// })
 
-app.get('/jurusan/:criteria', (req, res) => {
-    let id = req.params.criteria
+// app.get('/jurusan/:criteria', (req, res) => {
+//     let id = req.params.criteria
+//     let sql
+
+//     if(id === "all" || id === ""){
+//         sql = `select * from jurusan`
+//     } else {
+//         id = parseInt(id)
+//         sql = `select * from jurusan where id=${id}`
+//     }
+
+//     con.query(sql, (err, result, fields) => {
+//         if(err) throw err
+//         res.send(result)
+//     })
+// })
+
+app.get('/:data/:criteria', (req, res) => {
+    const data = req.params.data
+    const criteria = req.params.criteria
     let sql
-
-    if(id === "all" || id === ""){
-        sql = `select * from jurusan`
-    } else {
-        id = parseInt(id)
-        sql = `select * from jurusan where id=${id}`
+    if(data === "alumni") {
+        if(criteria === "all"){
+            sql = `select * from alumni`
+        } else {
+            criteria = parseInt(criteria)
+            sql  = `select * from alumni where id=${criteria}`
+        }
     }
-
-    con.query(sql, (err, result, fields) => {
-        if(err) throw err
-        res.send(result)
-    })
 })
 
 //--------------------- POST -----------------
