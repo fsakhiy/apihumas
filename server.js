@@ -149,7 +149,7 @@ app.patch('/lowongan', (req, res) => {
 })
 
 app.patch('/user/resetpassword', (req, res) => {
-    
+    const { username, password } = req.body
 })
 
 //--------------------- DELETE -------------------
