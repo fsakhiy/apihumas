@@ -35,7 +35,7 @@ app.get('/:data/:criteria', (req, res) => {
         sql = `select * from ${data} where id=${criteria}`
     }
 
-    if(data != "lowongan", "alumni", "jurusan") {
+    if(data != "lowongan" || data != "alumni" || data != "jurusan") {
         res.status(401)
         res.render("Unauthorized")
     }
