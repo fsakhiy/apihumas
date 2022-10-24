@@ -93,7 +93,7 @@ app.get('/', (req, res) => {
 
 app.get('/:data/:criteria', (req, res) => {
     const data = req.params.data
-    const criteria = req.params.criteria
+    let criteria = req.params.criteria
     let sql = `select * from ${data}`
 
     if(criteria != "all") {
