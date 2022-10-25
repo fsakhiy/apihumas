@@ -129,24 +129,6 @@ app.patch('/user/resetpassword', (req, res) => {
 
 //--------------------- DELETE -------------------
 
-// app.delete('/alumni/:id', (req, res) => {
-//     let id = req.params.id
-//     let sql = `delete from alumni where id=${id}`
-//     con.query(sql, (err, result) => {
-//         if (err) throw err
-//         res.send('data destroyed')
-//     })
-// })
-
-// app.delete('/lowongan/:id', (req, res) => {
-//     let id = req.params.id
-//     let sql = `delete from lowongan where id=${id}`
-//     con.query(sql, (err, result) => {
-//         if (err) throw err
-//         res.send('data destroyed')
-//     })
-// })
-
 app.delete('/:data/:id', (req, res) => {
     const data = req.params.data
     let id = req.params.id
