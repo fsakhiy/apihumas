@@ -30,7 +30,7 @@ app.get('/:data/:criteria', (req, res) => {
     let criteria = req.params.criteria
     let sql = `select * from ${data}`
 
-    if(data == "lowongan" || data == "alumni") {
+    if(data == "lowongan" || data == "alumni" || data == "jurusan") {
         
         if(criteria != "all") {
             criteria = parseInt(criteria)
@@ -39,6 +39,7 @@ app.get('/:data/:criteria', (req, res) => {
             sql = `select * from ${data}`
         }
     } else {
+        res.status(401)
         res.send('not authorized')
         return
     }
@@ -128,21 +129,39 @@ app.patch('/user/resetpassword', (req, res) => {
 
 //--------------------- DELETE -------------------
 
-app.delete('/alumni/:id', (req, res) => {
-    let id = req.params.id
-    let sql = `delete from alumni where id=${id}`
-    con.query(sql, (err, result) => {
-        if (err) throw err
-        res.send('data destroyed')
-    })
-})
+// app.delete('/alumni/:id', (req, res) => {
+//     let id = req.params.id
+//     let sql = `delete from alumni where id=${id}`
+//     con.query(sql, (err, result) => {
+//         if (err) throw err
+//         res.send('data destroyed')
+//     })
+// })
 
-app.delete('/lowongan/:id', (req, res) => {
+// app.delete('/lowongan/:id', (req, res) => {
+//     let id = req.params.id
+//     let sql = `delete from lowongan where id=${id}`
+//     con.query(sql, (err, result) => {
+//         if (err) throw err
+//         res.send('data destroyed')
+//     })
+// })
+
+app.delete('/:data/:id', (req, res) => {
+    const data = req.params.data
     let id = req.params.id
-    let sql = `delete from lowongan where id=${id}`
+    let sql
+
+    if(data == "alumni" || data == "lowongan") {
+        sql = `delete from ${data} where id=${id}`
+    } else {
+        res.status(400)
+        res.send("bad request")
+        return
+    }   
     con.query(sql, (err, result) => {
         if (err) throw err
-        res.send('data destroyed')
+        res.send("data destroyed")
     })
 })
 
