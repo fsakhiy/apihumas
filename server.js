@@ -53,7 +53,7 @@ app.get('/:data/:criteria', (req, res) => {
 //--------------------- POST -----------------
 
 app.post('/alumni', (req, res) => {
-    let { nama, tahunlulus, jurusan, status  } = req.body
+    let { nama, tahunlulus, jurusan, status, namakampus, alamatkampus, namakantor, alamatkantor, namausaha, alamatusaha } = req.body
 
     let sql = `insert into alumni(nama, tahunLulus, jurusan, status) value ("${nama}", ${tahunlulus}, ${jurusan}, "${status}")`
     con.query(sql, (err, result) => {
