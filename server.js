@@ -93,6 +93,15 @@ app.post('/login', (req, res) => {
     
 })
 
+app.post('/jurusan', (req, res) => {
+    const { nama, abv, deskripsi } = req.body
+    let sql = `insert into jurusan (nama, abv, deskripsi) value ('${nama}', '${abv}', '${deskripsi}')`
+    con.query(sql, (err, result) => {
+        if(err) throw err
+        res.send('record inserted')
+    })
+})
+
 //--------------------- PATCH -------------------
 
 app.patch('/alumni', (req, res) => {
