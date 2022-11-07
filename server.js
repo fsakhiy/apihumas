@@ -5,7 +5,7 @@ const mysql = require('mysql')
 const bcrypt = require('bcrypt')
 
 let con  = mysql.createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     user: "loc",
     password: "Loc#4096",
     database: 'api',
