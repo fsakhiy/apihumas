@@ -3,14 +3,11 @@ const app = express()
 const port = 3000
 const mysql = require('mysql')
 const bcrypt = require('bcrypt')
+const mysqlconfig = require(__dirname + '/mysqlconfig.js')
 
-let con  = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "loc",
-    password: "Loc#4096",
-    database: 'api',
-    port: 3306
-})
+// CAUTION !!!! YOU HAVE TO MAKE YOUR OWN CONFIG FILE FOR MYSQlCONFIG
+
+let con  = mysql.createConnection(mysqlconfig)
 
 con.connect((err) => {
     if(err) throw err
