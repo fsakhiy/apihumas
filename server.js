@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const mysql = require('mysql')
+const bcrypt = require('bcrypt')
 
 let con  = mysql.createConnection({
     host: "localhost",
@@ -72,25 +73,39 @@ app.post('/lowongan', (req, res) => {
     })
 })
 
-app.post('/user', (req, res) => {
-    const { idalumni, username, password } = req.body
-    let sql = `insert into user(username, password, idAlumni) value ('${username}', '${password}', ${idalumni})`
-    con.query(sql, (err,result) => {
-        if(err) throw err
-        res.send('record inserted')
-    })
+app.post('/user', async (req, res) => {
+    // const { idalumni, username, password } = req.body
+    // let sql = `insert into user(username, password, idAlumni) value ('${username}', '${password}', ${idalumni})`
+    // con.query(sql, (err,result) => {
+    //     if(err) throw err
+    //     res.send('record inserted')
+    // })
+    try {
+        const { idalumni, username, password} = req.body
+        const hashedPassword = await bcrypt.hash(password, 10)
+
+        const sql = `insert into user(username, password, idAlumni) values ('${username}', '${hashedPassword}', ${idalumni})`
+        con.query(sql, (err, result) => {
+            if(err) throw err
+            res.status(201).send('inserted')
+        })
+    } catch {
+        res.status(500).send()
+    }
+
 })
 
-app.post('/login', (req, res) => {
-    let { username, password, token } = req.body
-    let sql = `select password from user where username='${username}'`
-    con.query(sql, (err, result) => {
-        if(err) throw err
-        //res.send(result)
-        const pass = JSON.parse(result)
-        res.send(pass)
-    })
-    
+app.post('/login', async (req, res) => {
+    try {
+        const {username, password } = req.body
+        const user = `select * from user where username='${username}'`
+        con.query(user, (err, result) => {
+            if(err) throw err
+            res.send(result)
+        })
+    } catch {
+
+    }
 })
 
 app.post('/jurusan', (req, res) => {
@@ -134,6 +149,7 @@ app.patch('/lowongan', (req, res) => {
 
 app.patch('/user/resetpassword', (req, res) => {
     const { username, password } = req.body
+    sql = ``
 })
 
 //--------------------- DELETE -------------------
