@@ -92,18 +92,20 @@ app.post('/user', async (req, res) => {
 
 })
 
-app.post('/login', async (req, res) => {
-    try {
-        const {username, password } = req.body
-        const user = `select * from user where username='${username}'`
-        con.query(user, (err, result) => {
-            if(err) throw err
-            res.send(result)
-        })
-    } catch {
+// app.post('/login', async (req, res) => {
+//     try {
+//         const {username, password } = req.body
+//         const user = `select password from user where username='${username}'`
+//         con.query(user, async (err, result) => {
+//             if(err) throw err
+//             res.send(result)
+//         }).on('password', (row) => {
+//             console.log('password', password)
+//         })
+//     } catch {
 
-    }
-})
+//     }
+// })
 
 app.post('/jurusan', (req, res) => {
     const { nama, abv, deskripsi } = req.body
