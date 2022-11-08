@@ -18,9 +18,9 @@ app.use(express.json())
 
 //-------------------- GET ------------------
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/static/index.html')
-})
+// app.get('/', (req, res) => {
+//     res.sendFile(__dirname + '/static/index.html')
+// })
 
 
 app.get('/:data/:criteria', (req, res) => {
@@ -71,12 +71,6 @@ app.post('/lowongan', (req, res) => {
 })
 
 app.post('/user', async (req, res) => {
-    // const { idalumni, username, password } = req.body
-    // let sql = `insert into user(username, password, idAlumni) value ('${username}', '${password}', ${idalumni})`
-    // con.query(sql, (err,result) => {
-    //     if(err) throw err
-    //     res.send('record inserted')
-    // })
     try {
         const { idalumni, username, password} = req.body
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -92,19 +86,46 @@ app.post('/user', async (req, res) => {
 
 })
 
-// app.post('/login', async (req, res) => {
-//     try {
-//         const {username, password } = req.body
-//         const user = `select password from user where username='${username}'`
-//         con.query(user, async (err, result) => {
-//             if(err) throw err
-//             res.send(result)
-//         }).on('password', (row) => {
-//             console.log('password', password)
-//         })
-//     } catch {
+app.post('/login', async (req, res) => {
+    try {
+        const {username, password} = req.body
+        const userpassword = `select password from user where username='${username}'`
+        //con.query(userpassword, (err, result, row) => {}).on('result', (row) => {res.send('row.password', row.password)})
+        con.query(userpassword, async (err, result) => {
+            if(err) throw err
+            console.log(result)
+            result = String(JSON.parse(JSON.stringify(result))[0].password)
 
-//     }
+            // if(await bcrypt.compare(password, result)){
+            //     res.send('allowed')
+            // } else {
+            //     res.send('not allowed')
+            // }
+            //const hashedPassword = await bcrypt.hash(password, 10)
+            //console.log(hashedPassword)
+            // result = result[0].password
+            // let resultString = String(result)
+            // console.log(resultString)
+            
+            // res.send(`${result}`)
+            if(await bcrypt.compare(password, result)){
+                res.send('allowed')
+            } else {
+                res.send('not allowed')
+            }
+        })
+    } catch {}
+})
+
+// app.post('/login', async (req, res) => {
+//     const {username, password} = req.body
+//     const userpassword = `select password from user where username='${username}'`
+//     let retrievedPassword
+//     con.query(userpassword, (err, result) => {
+//         if(err) throw err
+//         result = toString(JSON.parse(JSON.stringify(result)))
+//     })
+
 // })
 
 app.post('/jurusan', (req, res) => {
