@@ -96,18 +96,6 @@ app.post('/login', async (req, res) => {
             console.log(result)
             result = String(JSON.parse(JSON.stringify(result))[0].password)
 
-            // if(await bcrypt.compare(password, result)){
-            //     res.send('allowed')
-            // } else {
-            //     res.send('not allowed')
-            // }
-            //const hashedPassword = await bcrypt.hash(password, 10)
-            //console.log(hashedPassword)
-            // result = result[0].password
-            // let resultString = String(result)
-            // console.log(resultString)
-            
-            // res.send(`${result}`)
             if(await bcrypt.compare(password, result)){
                 res.send('allowed')
             } else {
@@ -116,17 +104,6 @@ app.post('/login', async (req, res) => {
         })
     } catch {}
 })
-
-// app.post('/login', async (req, res) => {
-//     const {username, password} = req.body
-//     const userpassword = `select password from user where username='${username}'`
-//     let retrievedPassword
-//     con.query(userpassword, (err, result) => {
-//         if(err) throw err
-//         result = toString(JSON.parse(JSON.stringify(result)))
-//     })
-
-// })
 
 app.post('/jurusan', (req, res) => {
     const { nama, abv, deskripsi } = req.body
