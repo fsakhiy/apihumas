@@ -58,4 +58,19 @@ app.post('/add/:typeof', (req, res) => {
     }
 })
 
+app.delete('/delete/:data/:id', (req, res) => {
+    const {id, data} = req.params
+    if(data == "alumni") {
+        con.query(`delete from alumni where id=${id}`, (err, result) => {
+            if(err) throw err
+            res.status(200).send('DESTROOOOYYYEEED!!!!!')
+        })
+    } else if(data == "lowongan") {
+        con.query(`delete from lowongan where id=${id}`, (err, result) => {
+            if(err) throw err
+            res.status(200).send('DESTROYED!')
+        })
+    }
+})
+
 app.listen(port, () => console.log(`server is running on ${port}`))
