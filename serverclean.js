@@ -76,6 +76,30 @@ app.post('/add/:typeof', (req, res) => {
             res.status(201).send('success')
         })
     }
+    
+    else if(req.params.typeof == "lowongan") {
+        const {judul, deskripsi, kemampuanDibutuhkan, jenisPekerjaan} = req.body
+        con.query(`insert into lowongan(judul, deskripsi, kemampuanDibutuhkan, jenisPekerjaan) value ('${judul}', '${deskripsi}','${kemampuanDibutuhkan}','${jenisPekerjaan}')`, (err, result) => {
+            if(err) throw err
+            res.status(201).send('success')
+        })
+    }
+
+    else if(req.params.typeof == "pelamarKerja") {
+        const {idAlumni, idLowongan} = req.body
+        con.query(`insert into pelamarKerja(idAlumni, idLowongan) value (${idAlumni}, ${idLowongan})`, (err, result) => {
+            if(err) throw err
+            res.status(201).send('success')
+        })
+    }
+
+    else if(req.params.typeof == "user") {
+        const {username, password, idAlumni} = req.body
+        con.query(`insert into user(username, password, idAlumni) value ('${username}', '${password}',${idAlumni})`, (err, result) => {
+            if(err) throw err
+            res.status(201).send('success')
+        })
+    }
 })
 
 app.delete('/delete/:data/:id', (req, res) => {
