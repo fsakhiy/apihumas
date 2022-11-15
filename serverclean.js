@@ -102,6 +102,22 @@ app.post('/add/:typeof', (req, res) => {
     }
 })
 
+app.patch('/update/:column', (req, res) => {
+    const { column } = req.params
+    const { data, id, changes } = req.body
+    if(data == "alumni") {
+        con.query(`update alumni set ${column} = '${changes}' where id=${id}`, (err, result) => {
+            if(err) throw err
+            res.status(200).send('data updated')
+        })
+    } else if(data == "lowongan") {
+        con.query(`update lowongan set ${column} = '${changes}' where id=${id}`, (err, result) => {
+            if(err) throw err
+            res.status(200).send('data updated')
+        })   
+    }
+})
+
 app.delete('/delete/:data/:id', (req, res) => {
     const {id, data} = req.params
     if(data == "alumni") {
