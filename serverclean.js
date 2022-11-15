@@ -10,6 +10,26 @@ con.connect((err) => {if(err)throw err; console.log('connected')})
 
 app.use(express.json())
 
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + "/static/docs.html")
+})
+
+app.get('/delete', (req, res) => {
+    res.sendFile(__dirname + "/static/delete.html")
+})
+
+app.get('/post', (req, res) => {
+    res.sendFile(__dirname + "/static/post.html")
+})
+
+app.get('/get', (req, res) => {
+    res.sendFile(__dirname + "/static/get.html")
+})
+
+app.get('/patch', (req, res) => {
+    res.sendFile(__dirname + "/static/patch.html")
+})
+
 app.get('/:data/:criteria', (req, res) => {
     const data = req.params.data
     let criteria = req.params.criteria
