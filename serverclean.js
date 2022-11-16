@@ -1,8 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const port = 3000
 const mysql = require('mysql')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const mysqlconfig = require(__dirname + '/mysqlconfig.js')
 
 let con = mysql.createConnection(mysqlconfig)
@@ -92,14 +94,31 @@ app.post('/add/:typeof', (req, res) => {
             res.status(201).send('success')
         })
     }
+})
 
-    else if(req.params.typeof == "user") {
-        const {username, password, idAlumni} = req.body
-        con.query(`insert into user(username, password, idAlumni) value ('${username}', '${password}',${idAlumni})`, (err, result) => {
-            if(err) throw err
-            res.status(201).send('success')
-        })
-    }
+app.post('/signup', async (req, res) => {
+    const {username, password, idAlumni} = req.body
+    const hashedPassword = await bcrypt.hash(password, 10)
+    con.query(`insert into user (username, password, idAlumni) value ("${username}", "${hashedPassword}", ${idAlumni})`, (err) => {
+        if(err) throw err
+        res.status(201).send('created!')
+    })
+})
+
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body
+    con.query(`select password from user where username='${username}'`,async (err, result) => {
+        if(err) throw err
+        //result = String(JSON.parse(JSON.stringify(result))[0].pw)
+        result = String(JSON.parse(JSON.stringify(result))[0].password)
+        const data = { username: username}
+        if(await bcrypt.compare(password, result)) {
+            const accessToken = jwt.sign(data, process.env.SECRET_KEY)
+            res.status(200).send(accessToken)
+        } else {
+            res.sendStatus(401)
+        }
+    })
 })
 
 app.patch('/update/:column', (req, res) => {
@@ -132,5 +151,19 @@ app.delete('/delete/:data/:id', (req, res) => {
         })
     }
 })
+
+app.get('/test', authenticate, (req,res) => {
+    res.send(req.username)
+})
+
+function authenticate(req, res, next) {
+    const token = req.body.authtoken
+    if(token == null) return res.status(401).send('token missing')
+    jwt.verify(token, process.env.SECRET_KEY, (err, username) => {
+        if(err) return res.status(403).send("error token wrong")
+        req.username = username
+        next()
+    })
+}
 
 app.listen(port, () => console.log(`server is running on ${port}`))

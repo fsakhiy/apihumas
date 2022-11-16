@@ -1,8 +1,11 @@
+require('dotenv').config()
+
 const express = require('express')
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 const mysql = require('mysql')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const mysqlconfig = require(__dirname + '/mysqlconfig.js')
 
 // CAUTION !!!! YOU HAVE TO MAKE YOUR OWN CONFIG FILE FOR MYSQlCONFIG
