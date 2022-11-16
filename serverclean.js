@@ -99,7 +99,7 @@ app.post('/add/:typeof', authenticate, (req, res) => {
 app.post('/signup', async (req, res) => {
     const {username, password, idAlumni} = req.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    con.query(`insert into user (username, password, idAlumni) value ("${username}", "${hashedPassword}", ${idAlumni})`, (err) => {
+    con.query(`insert into user (username, password, idAlumni, admin) value ("${username}", "${hashedPassword}", ${idAlumni}, false)`, (err) => {
         if(err) throw err
         res.status(201).send('created!')
     })
@@ -115,7 +115,6 @@ app.post('/login', async (req, res) => {
         con.query(`select alumni.nama from user inner join alumni on user.idAlumni=alumni.id where alumni.id=${parsedID}`, async (err, result) => {
             if(err) throw err
             let name = String(JSON.parse(JSON.stringify(result))[0].nama) 
-                console.log(name)
                 const data = { 
                     username: username,
                     id: parsedID,
@@ -133,7 +132,8 @@ app.post('/login', async (req, res) => {
 
 app.patch('/update/:column', authenticate, (req, res) => {
     const { column } = req.params
-    const { data, id, changes } = req.body
+    const { data, changes } = req.body
+    const id = req.user.id
     if(data == "alumni") {
         con.query(`update alumni set ${column} = '${changes}' where id=${id}`, (err, result) => {
             if(err) throw err
