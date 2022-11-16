@@ -8,6 +8,26 @@
 </head>
 <body>
     <h1>POST</h1>
-    <a href="/">Go Back</a>
+    <a href="/">Home</a>
+    <ul>
+        <li><a href="/get">GET</a></li>
+        <li><a href="/post">POST</a></li>
+        <li><a href="/patch">PATCH</a></li>
+        <li><a href="/delete">DELETE</a></li>
+    </ul>
+    <br>
+    <div>
+        <h2>AUTHENTICATION</h2>
+        <p>token dibutuhkan untuk mengakses semua method <br>
+        untuk menerima token kamu harus login <br>
+        <b>POST /LOGIN</b><br>
+        request body: <br>
+        <ul>
+            <li>username</li>
+            <li>password</li>
+        </ul>
+        setelah itu anda akan mendapat token yg bisa digunakan untuk mengakses method lain
+    </p>
+    </div>
 </body>
 </html>

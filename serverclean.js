@@ -57,7 +57,7 @@ app.get('/:data/:criteria', (req, res) => {
     })
 })
 
-app.post('/add/:typeof', (req, res) => {
+app.post('/add/:typeof', authenticate, (req, res) => {
     
     if(req.params.typeof == "alumni") {
         const { jurusan, tahunLulus, nama, status, namaKampus, alamatKampus, namaKantor, alamatKantor, namaUsaha, alamatUsaha } = req.body
@@ -107,21 +107,31 @@ app.post('/signup', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
-    con.query(`select password from user where username='${username}'`,async (err, result) => {
+    con.query(`select password, idAlumni from user where username='${username}'`,async (err, result) => {
         if(err) throw err
         //result = String(JSON.parse(JSON.stringify(result))[0].pw)
-        result = String(JSON.parse(JSON.stringify(result))[0].password)
-        const data = { username: username}
-        if(await bcrypt.compare(password, result)) {
-            const accessToken = jwt.sign(data, process.env.SECRET_KEY)
-            res.status(200).send(accessToken)
-        } else {
-            res.sendStatus(401)
-        }
+        let parsedPassword = String(JSON.parse(JSON.stringify(result))[0].password)
+        let parsedID = String(JSON.parse(JSON.stringify(result))[0].idAlumni)
+        con.query(`select alumni.nama from user inner join alumni on user.idAlumni=alumni.id where alumni.id=${parsedID}`, async (err, result) => {
+            if(err) throw err
+            let name = String(JSON.parse(JSON.stringify(result))[0].nama) 
+                console.log(name)
+                const data = { 
+                    username: username,
+                    id: parsedID,
+                    name: name,
+                }
+                if(await bcrypt.compare(password, parsedPassword)) {
+                    const accessToken = jwt.sign(data, process.env.SECRET_KEY)
+                    res.status(200).send(accessToken)
+                } else {
+                    res.sendStatus(401)
+                }
+        })
     })
 })
 
-app.patch('/update/:column', (req, res) => {
+app.patch('/update/:column', authenticate, (req, res) => {
     const { column } = req.params
     const { data, id, changes } = req.body
     if(data == "alumni") {
@@ -137,7 +147,7 @@ app.patch('/update/:column', (req, res) => {
     }
 })
 
-app.delete('/delete/:data/:id', (req, res) => {
+app.delete('/delete/:data/:id', authenticate, (req, res) => {
     const {id, data} = req.params
     if(data == "alumni") {
         con.query(`delete from alumni where id=${id}`, (err, result) => {
@@ -153,15 +163,15 @@ app.delete('/delete/:data/:id', (req, res) => {
 })
 
 app.get('/test', authenticate, (req,res) => {
-    res.send(req.username)
+    res.send(req.user)
 })
 
 function authenticate(req, res, next) {
     const token = req.body.authtoken
     if(token == null) return res.status(401).send('token missing')
-    jwt.verify(token, process.env.SECRET_KEY, (err, username) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
         if(err) return res.status(403).send("error token wrong")
-        req.username = username
+        req.user = user
         next()
     })
 }
