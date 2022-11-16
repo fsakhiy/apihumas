@@ -107,11 +107,12 @@ app.post('/signup', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
-    con.query(`select password, idAlumni from user where username='${username}'`,async (err, result) => {
+    con.query(`select password, idAlumni, admin from user where username='${username}'`,async (err, result) => {
         if(err) throw err
         //result = String(JSON.parse(JSON.stringify(result))[0].pw)
         let parsedPassword = String(JSON.parse(JSON.stringify(result))[0].password)
         let parsedID = String(JSON.parse(JSON.stringify(result))[0].idAlumni)
+        let parsedAdmin = String(JSON.parse(JSON.stringify(result))[0].admin)
         con.query(`select alumni.nama from user inner join alumni on user.idAlumni=alumni.id where alumni.id=${parsedID}`, async (err, result) => {
             if(err) throw err
             let name = String(JSON.parse(JSON.stringify(result))[0].nama) 
@@ -119,6 +120,7 @@ app.post('/login', async (req, res) => {
                     username: username,
                     id: parsedID,
                     name: name,
+                    admin: parsedAdmin
                 }
                 if(await bcrypt.compare(password, parsedPassword)) {
                     const accessToken = jwt.sign(data, process.env.SECRET_KEY)
@@ -133,7 +135,12 @@ app.post('/login', async (req, res) => {
 app.patch('/update/:column', authenticate, (req, res) => {
     const { column } = req.params
     const { data, changes } = req.body
-    const id = req.user.id
+    let id
+    if(req.user.admin == "1") {
+        id = req.body.id
+    } else {
+        id = req.user.id
+    }
     if(data == "alumni") {
         con.query(`update alumni set ${column} = '${changes}' where id=${id}`, (err, result) => {
             if(err) throw err
