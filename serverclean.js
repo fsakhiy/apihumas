@@ -6,6 +6,14 @@ const mysql = require('mysql')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mysqlconfig = require(__dirname + '/mysqlconfig.js')
+const mail = require('nodemailer')
+const emailconfig = require(__dirname + '/pass.js')
+
+const transporter = mail.createTransport({
+    service: "outlook",
+    auth: emailconfig
+})
+
 
 let con = mysql.createConnection(mysqlconfig)
 con.connect((err) => {if(err)throw err; console.log('connected')})
@@ -107,12 +115,13 @@ app.post('/signup', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
-    con.query(`select password, idAlumni, admin from user where username='${username}'`,async (err, result) => {
+    con.query(`select password, idAlumni, admin, email from user where username='${username}'`,async (err, result) => {
         if(err) throw err
         //result = String(JSON.parse(JSON.stringify(result))[0].pw)
         let parsedPassword = String(JSON.parse(JSON.stringify(result))[0].password)
         let parsedID = String(JSON.parse(JSON.stringify(result))[0].idAlumni)
         let parsedAdmin = String(JSON.parse(JSON.stringify(result))[0].admin)
+        let parsedEmail = String(JSON.parse(JSON.stringify(result))[0].email)
         con.query(`select alumni.nama from user inner join alumni on user.idAlumni=alumni.id where alumni.id=${parsedID}`, async (err, result) => {
             if(err) throw err
             let name = String(JSON.parse(JSON.stringify(result))[0].nama) 
@@ -120,16 +129,47 @@ app.post('/login', async (req, res) => {
                     username: username,
                     id: parsedID,
                     name: name,
-                    admin: parsedAdmin
+                    admin: parsedAdmin,
+                    email: parsedEmail
                 }
                 if(await bcrypt.compare(password, parsedPassword)) {
-                    const accessToken = jwt.sign(data, process.env.SECRET_KEY)
-                    res.status(200).send(accessToken)
+                    const accessToken = jwt.sign(data, process.env.SECRET_KEY, { expiresIn: "15m"})
+                    const refreshToken = jwt.sign(data, process.env.REFRESH_KEY)
+                    con.query(`insert into reftoken value ('${refreshToken}')`, (err) => {if (err) throw err})
+                    res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken})
                 } else {
                     res.sendStatus(401)
                 }
         })
     })
+})
+
+app.post('/token', (req, res) => {
+    const refreshToken = req.body.refreshToken
+    con.query(`select * from reftoken where refreshToken='${refreshToken}'`, (err, result) => {
+        if(err)throw err
+        const isAvailable = String(JSON.parse(JSON.stringify(result))[0])
+        if(isAvailable == "undefined") {
+            res.status(401).send('no')
+        } else {
+            jwt.verify(refreshToken, process.env.REFRESH_KEY, (err, user) => {
+                if(err) {
+                    throw err
+                    res.status(403).send('no')
+                }
+                const accessToken = jwt.sign({username: user.username, id: user.id, name: user.name, admin: user.admin, email: user.email}, process.env.SECRET_KEY, {expiresIn: "15m"})
+                res.json({accessToken: accessToken})
+            })
+        }
+    })
+})
+
+app.delete('/logout', (req, res) => {
+    const refreshToken = req.body.refreshToken
+    con.query(`delete from reftoken where refreshToken='${refreshToken}'`, (err) => {
+        if(err) throw err
+    })
+    res.status(204).send('success')
 })
 
 app.patch('/update/:column', authenticate, (req, res) => {
@@ -154,6 +194,20 @@ app.patch('/update/:column', authenticate, (req, res) => {
     }
 })
 
+app.post('/reset', authenticate, (req, res) => {
+    const mailOptions = {
+        from: "apihumastesting@outlook.com",
+        to: `${req.user.email}`,
+        subject: "Password Reset for Career8",
+        text: `test`
+    }
+
+    transporter.sendMail(mailOptions, (err, info) => {
+        if(err) throw err
+        res.send('email sent: ' + info.response)
+    })
+})
+
 app.delete('/delete/:data/:id', authenticate, (req, res) => {
     const {id, data} = req.params
     if(data == "alumni") {
@@ -168,6 +222,7 @@ app.delete('/delete/:data/:id', authenticate, (req, res) => {
         })
     }
 })
+
 
 app.get('/test', authenticate, (req,res) => {
     res.send(req.user)
