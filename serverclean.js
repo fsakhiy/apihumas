@@ -8,15 +8,28 @@ const jwt = require('jsonwebtoken')
 const mysqlconfig = require(__dirname + '/mysqlconfig.js')
 const mail = require('nodemailer')
 const emailconfig = require(__dirname + '/pass.js')
+const multer = require('multer')
+const path = require('path')
 
 const transporter = mail.createTransport({
     service: "outlook",
     auth: emailconfig
 })
 
-
 let con = mysql.createConnection(mysqlconfig)
 con.connect((err) => {if(err)throw err; console.log('connected')})
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads")
+    },
+    filename: (req, file, cb) => {
+        const name = Date.now() + path.parse(file.originalname).ext
+        cb(null, name)
+    }
+})
+
+const upload = multer({storage: storage})
 
 app.use(express.json())
 
@@ -102,6 +115,11 @@ app.post('/add/:typeof', authenticate, (req, res) => {
             res.status(201).send('success')
         })
     }
+})
+
+app.post('/upload/cv', upload.single('cv'), (req, res) => {
+    con.query(``)
+    res.send()
 })
 
 app.post('/signup', async (req, res) => {
