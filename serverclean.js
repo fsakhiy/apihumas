@@ -241,7 +241,7 @@ app.post('/forgot', (req, res) => {
 
 app.get('/resetpassword', (req, res) => {
     if(jwt.verify(req.query.token, process.env.RESET_KEY)){
-        res.sendFile('static/resetpassword.html')
+        res.send('<html><head><title>Reset Password</title></head><body><form method="POST" action="https://apihumas.fairuzsakhiy.com/resetpassword"><button type="submit">Reset</button></form></body></html>')
     } else {
         res.status(401)
     }
