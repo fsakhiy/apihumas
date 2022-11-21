@@ -117,9 +117,12 @@ app.post('/add/:typeof', authenticate, (req, res) => {
     }
 })
 
+// app.use(upload.array())
+// app.use(express.static('uploads'))
+
 app.post('/upload/cv', upload.single('cv'), (req, res) => {
-    con.query(``)
-    res.send()
+    console.log(Date.now())
+    res.send(req.body)
 })
 
 app.post('/signup', async (req, res) => {
@@ -212,18 +215,32 @@ app.patch('/update/:column', authenticate, (req, res) => {
     }
 })
 
-app.post('/reset', authenticate, (req, res) => {
-    const mailOptions = {
-        from: "apihumastesting@outlook.com",
-        to: `${req.user.email}`,
-        subject: "Password Reset for Career8",
-        text: `test`
-    }
-
-    transporter.sendMail(mailOptions, (err, info) => {
-        if(err) throw err
-        res.send('email sent: ' + info.response)
+app.post('/forgot', (req, res) => {
+    const email = req.body.email
+    con.query(`select * from user where email='${email}'`, (err, result) => {
+        if (err) throw err
+        result = String(JSON.parse(JSON.stringify(result))[0])
+        if(result == "undefined") {
+            res.status(401).send('email not found')
+        } else {
+            const token = jwt.sign({ email: email}, process.env.SECRET_KEY, { expiresIn: "15m"})
+            const mailOptions = {
+                from: "apihumastesting@outlook.com",
+                to: `${email}`,
+                subject: "Password Reset for Career8",
+                html: `<h1>Password reset for your Career8 account:</h1><form method="POST" action="http://apihumas.fairuzsakhiy.com/resetpassword?token=${token}><button type="submit">Reset Password</button></form>`
+            }
+        
+            transporter.sendMail(mailOptions, (err, info) => {
+                if(err) throw err
+                res.send('email sent: ' + info.response)
+            })
+        }
     })
+})
+
+app.post('/resetpassword', (req, res) => {
+    res.send(req.query.token)
 })
 
 app.delete('/delete/:data/:id', authenticate, (req, res) => {
