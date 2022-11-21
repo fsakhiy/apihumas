@@ -223,7 +223,7 @@ app.post('/forgot', (req, res) => {
         if(result == "undefined") {
             res.status(401).send('email not found')
         } else {
-            const token = jwt.sign({ email: email}, process.env.SECRET_KEY, { expiresIn: "15m"})
+            const token = jwt.sign({ email: email}, process.env.RESET_KEY, { expiresIn: "15m"})
             const mailOptions = {
                 from: "apihumastesting@outlook.com",
                 to: `${email}`,
@@ -240,7 +240,15 @@ app.post('/forgot', (req, res) => {
 })
 
 app.get('/resetpassword', (req, res) => {
-    res.send(req.query.token)
+    if(jwt.verify(req.query.token, process.env.RESET_KEY)){
+        res.sendFile('static/resetpassword.html')
+    } else {
+        res.status(401)
+    }
+})
+
+app.post('/resetpassword', (req, res) => {
+
 })
 
 app.delete('/delete/:data/:id', authenticate, (req, res) => {
@@ -256,11 +264,6 @@ app.delete('/delete/:data/:id', authenticate, (req, res) => {
             res.status(200).send('DESTROYED!')
         })
     }
-})
-
-
-app.get('/test', authenticate, (req,res) => {
-    res.send(req.user)
 })
 
 function authenticate(req, res, next) {
