@@ -248,7 +248,7 @@ app.get('/resetpassword', (req, res) => {
 })
 
 app.post('/resetpassword', (req, res) => {
-
+    res.send(req.query.token)
 })
 
 app.delete('/delete/:data/:id', authenticate, (req, res) => {
