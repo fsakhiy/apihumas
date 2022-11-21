@@ -228,7 +228,7 @@ app.post('/forgot', (req, res) => {
                 from: "apihumastesting@outlook.com",
                 to: `${email}`,
                 subject: "Password Reset for Career8",
-                html: `<h1>Password reset for your Career8 account:</h1><a href="https://apihumas.fairuzsakhiy.com/resetpassword?token=${token}'>Reset Password</a></form>`
+                html: `<h1>Password reset for your Career8 account:</h1><a href="https://apihumas.fairuzsakhiy.com/resetpassword?token=${token}">Reset Password</a></form>`
             }
         
             transporter.sendMail(mailOptions, (err, info) => {
