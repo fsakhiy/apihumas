@@ -13,7 +13,7 @@
             <img src="undraw_Forgot_password_re_hxwm 1.png" alt="image of forgot password">
         </figure>
         <div class="container"> 
-            <form>
+            <form action="/resetpassword" method="post">
                 <div class="title">Reset Kata Sandi</div>
                 
                 <input type="password" name="password" placeholder="Kata sandi baru">
@@ -36,10 +36,10 @@
 
                 let param = getParams()
                 let token = unescape(param["token"])
-                document.write(`<input type="text" name="token" value="${token}">`)
+                document.write(`<input type="hidden" name="token" value="${token}">`)
                 </script>
 
-                <button type="submit">
+                <input type="submit" value="SAVE" id="submitButton">
             </form>
     
         </div>
