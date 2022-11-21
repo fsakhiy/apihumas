@@ -241,10 +241,12 @@ app.post('/forgot', (req, res) => {
     })
 })
 
-app.get('/resetpassword', (req, res) => {
+app.use(express.static('static/'))
+
+app.get('/resetpassword', express.static('public'), (req, res) => {
     const token = jwt.verify(req.query.token, process.env.RESET_KEY)
     if(token) {
-        res.sendFile(__dirname + "/static/indexresetpassword.html")
+        res.sendFile(__dirname + "static/reset.html")
     }
     
 })
