@@ -239,7 +239,7 @@ app.post('/forgot', (req, res) => {
     })
 })
 
-app.post('/resetpassword', (req, res) => {
+app.get('/resetpassword', (req, res) => {
     res.send(req.query.token)
 })
 
