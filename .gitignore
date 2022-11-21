@@ -3,3 +3,5 @@ req.rest
 retrievejurusan.js
 email.js
 pass.js
+uploadfile.js
+uploads/

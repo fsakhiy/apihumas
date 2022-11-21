@@ -8,15 +8,28 @@ const jwt = require('jsonwebtoken')
 const mysqlconfig = require(__dirname + '/mysqlconfig.js')
 const mail = require('nodemailer')
 const emailconfig = require(__dirname + '/pass.js')
+const multer = require('multer')
+const path = require('path')
 
 const transporter = mail.createTransport({
     service: "outlook",
     auth: emailconfig
 })
 
-
 let con = mysql.createConnection(mysqlconfig)
 con.connect((err) => {if(err)throw err; console.log('connected')})
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads")
+    },
+    filename: (req, file, cb) => {
+        const name = Date.now() + path.parse(file.originalname).ext
+        cb(null, name)
+    }
+})
+
+const upload = multer({storage: storage})
 
 app.use(express.json())
 
@@ -104,10 +117,18 @@ app.post('/add/:typeof', authenticate, (req, res) => {
     }
 })
 
+// app.use(upload.array())
+// app.use(express.static('uploads'))
+
+app.post('/upload/cv', upload.single('cv'), (req, res) => {
+    console.log(Date.now())
+    res.send(req.body)
+})
+
 app.post('/signup', async (req, res) => {
-    const {username, password, idAlumni} = req.body
+    const {username, password, idAlumni, admin, email} = req.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    con.query(`insert into user (username, password, idAlumni, admin) value ("${username}", "${hashedPassword}", ${idAlumni}, false)`, (err) => {
+    con.query(`insert into user (username, password, idAlumni, admin, email) value ("${username}", "${hashedPassword}", ${idAlumni}, ${admin}, '${email}')`, (err) => {
         if(err) throw err
         res.status(201).send('created!')
     })
@@ -194,18 +215,32 @@ app.patch('/update/:column', authenticate, (req, res) => {
     }
 })
 
-app.post('/reset', authenticate, (req, res) => {
-    const mailOptions = {
-        from: "apihumastesting@outlook.com",
-        to: `${req.user.email}`,
-        subject: "Password Reset for Career8",
-        text: `test`
-    }
-
-    transporter.sendMail(mailOptions, (err, info) => {
-        if(err) throw err
-        res.send('email sent: ' + info.response)
+app.post('/forgot', (req, res) => {
+    const email = req.body.email
+    con.query(`select * from user where email='${email}'`, (err, result) => {
+        if (err) throw err
+        result = String(JSON.parse(JSON.stringify(result))[0])
+        if(result == "undefined") {
+            res.status(401).send('email not found')
+        } else {
+            const token = jwt.sign({ email: email}, process.env.SECRET_KEY, { expiresIn: "15m"})
+            const mailOptions = {
+                from: "apihumastesting@outlook.com",
+                to: `${email}`,
+                subject: "Password Reset for Career8",
+                html: `<h1>Password reset for your Career8 account:</h1><a href="https://apihumas.fairuzsakhiy.com/resetpassword?token=${token}">Reset Password</a></form>`
+            }
+        
+            transporter.sendMail(mailOptions, (err, info) => {
+                if(err) throw err
+                res.send('email sent: ' + info.response)
+            })
+        }
     })
+})
+
+app.get('/resetpassword', (req, res) => {
+    res.send(req.query.token)
 })
 
 app.delete('/delete/:data/:id', authenticate, (req, res) => {
