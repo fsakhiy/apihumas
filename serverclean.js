@@ -126,9 +126,9 @@ app.post('/upload/cv', upload.single('cv'), (req, res) => {
 })
 
 app.post('/signup', async (req, res) => {
-    const {username, password, idAlumni} = req.body
+    const {username, password, idAlumni, admin, email} = req.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    con.query(`insert into user (username, password, idAlumni, admin) value ("${username}", "${hashedPassword}", ${idAlumni}, false)`, (err) => {
+    con.query(`insert into user (username, password, idAlumni, admin, email) value ("${username}", "${hashedPassword}", ${idAlumni}, ${admin}, ${email})`, (err) => {
         if(err) throw err
         res.status(201).send('created!')
     })
