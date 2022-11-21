@@ -246,9 +246,8 @@ app.use(express.static('static/'))
 app.get('/resetpassword', express.static('public'), (req, res) => {
     const token = jwt.verify(req.query.token, process.env.RESET_KEY)
     if(token) {
-        res.sendFile(__dirname + "static/reset.html")
+        res.sendFile(__dirname + "/static/reset.html")
     }
-    
 })
 
 const urlEncoderParser = bodyparser.urlencoded({extended: false})
