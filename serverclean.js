@@ -10,6 +10,8 @@ const mail = require('nodemailer')
 const emailconfig = require(__dirname + '/pass.js')
 const multer = require('multer')
 const path = require('path')
+const qs = require('querystring')
+const bodyparser = require('body-parser')
 
 const transporter = mail.createTransport({
     service: "outlook",
@@ -240,15 +242,26 @@ app.post('/forgot', (req, res) => {
 })
 
 app.get('/resetpassword', (req, res) => {
-    if(jwt.verify(req.query.token, process.env.RESET_KEY)){
-        res.send('<html><head><title>Reset Password</title></head><body><form method="POST" action="https://apihumas.fairuzsakhiy.com/resetpassword"><button type="submit">Reset</button></form></body></html>')
-    } else {
-        res.status(401)
+    const token = jwt.verify(req.query.token, process.env.RESET_KEY)
+    if(token) {
+        res.sendFile(__dirname + "/static/resetpassword.html")
     }
+    
 })
 
-app.post('/resetpassword', (req, res) => {
-    res.send(req.query.token)
+const urlEncoderParser = bodyparser.urlencoded({extended: false})
+
+app.post('/resetpassword', urlEncoderParser, async (req, res) => {
+    const token = jwt.verify(req.body.token, process.env.RESET_KEY)
+    if(req.body.password == req.body.passwordconfirmation) {
+        const password = await bcrypt.hash(req.body.password, 10)
+        con.query(`update user set password='${password}' where email='${token.email}'`, (err) => {
+            if(err) throw err
+            res.status(200).send()
+        })
+    } else {
+        res.send("your password doesn't match")
+    }
 })
 
 app.delete('/delete/:data/:id', authenticate, (req, res) => {
