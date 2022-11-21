@@ -261,7 +261,7 @@ app.post('/resetpassword', urlEncoderParser, async (req, res) => {
             res.status(200).send()
         })
     } else {
-        res.send("your password doesn't match")
+        res.redirect(`https://apihumas.fairuzsakhiy.com/resetpassword?token=${req.body.token}?password=wrong`)
     }
 })
 
