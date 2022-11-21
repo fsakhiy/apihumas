@@ -244,7 +244,7 @@ app.post('/forgot', (req, res) => {
 app.get('/resetpassword', (req, res) => {
     const token = jwt.verify(req.query.token, process.env.RESET_KEY)
     if(token) {
-        res.sendFile(__dirname + "/static/resetpassword.html")
+        res.sendFile(__dirname + "/static/indexresetpassword.html")
     }
     
 })
