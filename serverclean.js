@@ -14,7 +14,8 @@ const qs = require('querystring')
 const bodyparser = require('body-parser')
 
 const transporter = mail.createTransport({
-    service: "outlook",
+    host: "smtp.office365.com",
+    port: 587,
     auth: emailconfig
 })
 
