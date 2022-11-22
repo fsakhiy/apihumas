@@ -252,13 +252,13 @@ app.get('/resetpassword', express.static('public'), (req, res) => {
 
 const urlEncoderParser = bodyparser.urlencoded({extended: false})
 
-app.post('/resetpassword', urlEncoderParser, async (req, res) => {
+app.post('/resetpassword', express.static('public'), urlEncoderParser, async (req, res) => {
     const token = jwt.verify(req.body.token, process.env.RESET_KEY)
     if(req.body.password == req.body.passwordconfirmation) {
         const password = await bcrypt.hash(req.body.password, 10)
         con.query(`update user set password='${password}' where email='${token.email}'`, (err) => {
             if(err) throw err
-            res.status(200).send()
+            res.status(200).sendFile(__dirname + "/static/passwordupdated.html")
         })
     } else {
         res.redirect(`https://apihumas.fairuzsakhiy.com/resetpassword?token=${req.body.token}?password=wrong`)
