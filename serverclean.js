@@ -56,6 +56,10 @@ app.get('/patch', (req, res) => {
     res.sendFile(__dirname + "/static/patch.html")
 })
 
+app.get('/auth', (req, res) => {
+    res.sendFile(__dirname + "/static/auth.html")
+})
+
 app.get('/:data/:criteria', (req, res) => {
     const data = req.params.data
     let criteria = req.params.criteria
@@ -71,7 +75,6 @@ app.get('/:data/:criteria', (req, res) => {
         }
     } else {
         res.status(401)
-        res.send('not authorized')
         return
     }
 

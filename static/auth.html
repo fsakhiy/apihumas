@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation</title>
+</head>
+<body>
+    <h1>Authentication</h1>
+    <ul>
+        <li><a href="/get">GET</a></li>
+        <li><a href="/post">POST</a></li>
+        <li><a href="/patch">PATCH</a></li>
+        <li><a href="/delete">DELETE</a></li>
+        <li><a href="/auth">AUTHENTICATION</a></li>
+    </ul>
+    <p>untuk kebanyakan method anda perlu melakukan authentikasi</p>
+    <ul>
+        <li><h2>signup</h2></li>
+        <p>kamu akan memerlukan signup untuk membuat user baru
+            <br> <b>POST /signup</b>
+            <br> req body = json = username, password, idAlumni, admin, email
+        </p>
+        <li><h2>login</h2></li>
+        <p>login akan dibutuhkan untuk membuat access token dan refresh token
+            <br><b>POST /login</b>
+            <br>req body = json = username, password
+        </p>
+        <li><h2>autentikasi</h2></li>
+        <p>ini akan kamu butuhkan untuk mengakses api itu sendir
+            <br><b> POST or GET or PATCH or DELETE /(yg kamu akan akses)</b>
+            <br> di req body = json = ditambahkan authtoken ({ "authtoken": "(access token dari POST /login)"})
+        </p>
+        <li><h2>logout</h2></li>
+        <p>ini digunakan ketika user mau logout dan <b>berfungsi untuk membuat refreshtoken expired</b> 
+            <br><b>DELETE /logout</b>
+            <br> di req body = json = refreshToken ({"refreshToken": "(refreshtoken dari post /login)"})
+        </p>
+        <li><h2>reset password</h2></li>
+        <p>ini digunakan untuk ketika user lupa password.
+            <br> <b>UNTUK RESET PASSWORD AKAN DILAKUIKAN DILUAR APLIKASI, APLIKASI BERFUNGSI HANYA UNTUK MENGIRIM EMAIL RESET PASSWORD</b>
+            <br> untuk merequest email untuk reset password
+            <br> di req body = json = email ({"email": (email user)})
+            <br> sisanya akan dihandle external
+        </p>
+    </ul>
+</body>
+</html>

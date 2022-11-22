@@ -14,20 +14,47 @@
         <li><a href="/post">POST</a></li>
         <li><a href="/patch">PATCH</a></li>
         <li><a href="/delete">DELETE</a></li>
+        <li><a href="/auth">AUTHENTICATION</a></li>
     </ul>
     <br>
-    <div>
-        <h2>AUTHENTICATION</h2>
-        <p>token dibutuhkan untuk mengakses semua method <br>
-        untuk menerima token kamu harus login <br>
-        <b>POST /LOGIN</b><br>
-        request body: <br>
+    <ul>
+        <li>Menambah alumni, jurusan, lowongan, pelamarKerja</li>
+        <p> POST /add/:typeof
+            <br>typeof = alumni, jurusan, lowongan, pelamarKerja
+            <br> melakukan autentikasi, body = json =</p>
         <ul>
-            <li>username</li>
-            <li>password</li>
+            <li><h3>alumni:</h3></li>
+            <ul>
+                <li>nama</li>
+                <li>tahunLulus</li>
+                <li>jurusan</li>
+                <li>status</li>
+                <li>uriFileCV</li>
+                <p><b>untuk cv ini masih belum bisa digunakan</b></p>
+                <li>namaKampus</li>
+                <li>alamatKampus</li>
+                <li>namaKantor</li>
+                <li>alamatKantor</li>
+                <li>namaUsaha</li>
+                <li>alamatUsaha</li>
+            </ul>
+            <li><h3>jurusan</h3></li>
+            <ul>
+                <li>nama</li>
+                <p>nama <b>lengkap</b> jurusan</p>
+                <li>abv</li>
+                <p>singkatan jurusan</p>
+                <li>deskripsi</li>
+                <p>deskripsi jurusan</p>
+            </ul>
+            <li><h3>lowongan</h3></li>
+            <ul>
+                <li>judul</li>
+                <li>deskripsi</li>
+                <li>kemampuanDibutuhkan</li>
+                <li>jenisPekerjaan</li>
+            </ul>
         </ul>
-        setelah itu anda akan mendapat token yg bisa digunakan untuk mengakses method lain
-    </p>
-    </div>
+    </ul>
 </body>
 </html>
