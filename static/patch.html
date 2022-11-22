@@ -16,7 +16,23 @@
         <li><a href="/delete">DELETE</a></li>
         <li><a href="/auth">AUTHENTICATION</a></li>
     </ul>
-    
+    <h2>PATCH /update/:column</h2>
+    <p>digunakan untuk mengupdate data</p>
+    <p><b>APABILA USER YG DIPAKAI ADMIN MAKA BISA MENGGANTI DATA LAIN</b></p>
+    <h3>Data:</h3>
+    <ul>
+        <li>Parameter</li>
+        <p>parameter :column ini diisi kolom yg mau diganti
+            <br>contohnya adalah nama, tahunLulus, dan namaKantor dan lain-lain
+        </p>
+        <li>Req Body</li>
+        <ul>
+            <li>data</li>
+            <p><b>digunakan untuk memilih data yg diganti (alumni, lowongan)</b></p>
+            <li>changes</li>
+            <p>ini diisi dengan gantinya data</p>
+        </ul>
+    </ul>
     <br>
 </body>
 </html>

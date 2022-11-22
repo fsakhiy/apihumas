@@ -44,6 +44,13 @@
             <br> di req body = json = email ({"email": (email user)})
             <br> sisanya akan dihandle external
         </p>
+        <li><h2>refresh access token</h2></li>
+        <p>ini digunakan ketika access token user sudah expired
+            <br><b>POST /token</b>
+            <br>req body = json = diisi dengan refreshToken
+            <br>setelah itu kamu akan diberi accessToken baru yg bisa dipakai
+            <br><b>access token hanya bisa dipakai 15menit</b>
+        </p>
     </ul>
 </body>
 </html>
