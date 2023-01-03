@@ -131,14 +131,38 @@ app.post('/upload/cv', upload.single('cv'), (req, res) => {
     res.send(req.body)
 })
 
+// app.post('/signup', async (req, res) => {
+//     const {username, password, idAlumni, admin, email} = req.body
+//     const hashedPassword = await bcrypt.hash(password, 10)
+//     con.query(`insert into user (username, password, idAlumni, isAdmin, email) value ("${username}", "${hashedPassword}", ${idAlumni}, ${admin}, '${email}')`, (err) => {
+//         if(err) throw err
+//         res.status(201).send('created!')
+//     })
+// })
+
 app.post('/signup', async (req, res) => {
-    const {username, password, idAlumni, admin, email} = req.body
-    const hashedPassword = await bcrypt.hash(password, 10)
-    con.query(`insert into user (username, password, idAlumni, admin, email) value ("${username}", "${hashedPassword}", ${idAlumni}, ${admin}, '${email}')`, (err) => {
-        if(err) throw err
-        res.status(201).send('created!')
-    })
+    const {username, password, email, admin} = req.body
+    const {nama,tahunlulus,jurusan,status,namakampus,alamatkampus,namakantor,alamatkantor,namausaha,alamatusaha} = req.body
+    const hashPass = await bcrypt.hash(password, 10)
+    const insertalumnidata = `insert into alumni(nama, tahunLulus,jurusan,status,namaKampus,alamatKampus,namaKantor,alamatKantor,namaUsaha,alamatUsaha) value ("${nama}", ${tahunlulus} , ${jurusan},"${status}","${namakampus}","${alamatkampus}","${namakantor}","${alamatkantor}","${namausaha}","${alamatusaha}")`
+    // con.query(sql, (err) => {
+    //     if(err) throw err
+    //     res.status(200).send()
+    // })
+    con.query(insertalumnidata, (err) => {
+        if (err) throw err
+        con.query(`select id from alumni where nama='${nama}'`, (err, result) => {
+            if (err) throw err
+            const idalumni = JSON.parse(JSON.stringify(result))[0].id
+            const createuser = `insert into user (username,password,idAlumni,isAdmin,email) value ("${username}", "${hashPass}", ${idalumni}, ${false},"${email}")`
+            con.query(createuser, (err) => {
+                if (err) throw err
+                res.status(200).send()
+            })
+        })
+    }) 
 })
+
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
