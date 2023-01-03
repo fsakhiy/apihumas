@@ -166,7 +166,7 @@ app.post('/signup', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
-    con.query(`select password, idAlumni, admin, email from user where username='${username}'`,async (err, result) => {
+    con.query(`select password, idAlumni, isadmin, email from user where username='${username}'`,async (err, result) => {
         if(err) throw err
         //result = String(JSON.parse(JSON.stringify(result))[0].pw)
         let parsedPassword = String(JSON.parse(JSON.stringify(result))[0].password)
